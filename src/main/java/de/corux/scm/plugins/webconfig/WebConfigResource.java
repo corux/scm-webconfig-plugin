@@ -49,8 +49,7 @@ public class WebConfigResource
         Status status = Status.OK;
         try
         {
-            RepositoryService repositoryService = repositoryServiceFactory.create(repositoryId);
-            Repository repository = repositoryService.getRepository();
+            Repository repository = getRepository(repositoryId);
 
             GetConfigResponse response = new GetConfigResponse();
             String content = null;
@@ -103,9 +102,7 @@ public class WebConfigResource
         Status status = Status.OK;
         try
         {
-            RepositoryService repositoryService = repositoryServiceFactory.create(repositoryId);
-            Repository repository = repositoryService.getRepository();
-
+            Repository repository = getRepository(repositoryId);
             String type = repository.getType();
             if ("git".equals(type))
             {
@@ -134,5 +131,32 @@ public class WebConfigResource
         }
 
         return Response.status(status).build();
+    }
+
+    /**
+     * Gets the repository by its id.
+     *
+     * @param repositoryId
+     *            the repository id
+     * @return the repository
+     * @throws RepositoryNotFoundException
+     *             the repository was not found
+     */
+    private Repository getRepository(final String repositoryId) throws RepositoryNotFoundException
+    {
+        RepositoryService repositoryService = null;
+        try
+        {
+            repositoryService = repositoryServiceFactory.create(repositoryId);
+            Repository repository = repositoryService.getRepository();
+            return repository;
+        }
+        finally
+        {
+            if (repositoryService != null)
+            {
+                repositoryService.close();
+            }
+        }
     }
 }
