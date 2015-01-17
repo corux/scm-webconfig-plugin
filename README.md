@@ -1,2 +1,8 @@
-# scm-webconfig-plugin
-SCM Manager plugin to allow modifying the .hg/hgrc, .git/config, and conf/svnserve.conf files through the web interface.
+scm-webconfig-plugin
+==============================
+This plugin is part of the scm-manager (http://www.scm-manager.org) project.
+
+Issue tracker: https://github.com/corux/scm-webconfig-plugin/issues
+
+Mailing list:  http://groups.google.com/group/scmmanager
+Wiki: https://github.com/corux/scm-webconfig-plugin
