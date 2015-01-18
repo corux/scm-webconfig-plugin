@@ -13,14 +13,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 
-import sonia.scm.config.ScmConfiguration;
-import sonia.scm.repository.PermissionType;
-import sonia.scm.repository.PermissionUtil;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryNotFoundException;
 import sonia.scm.repository.api.RepositoryService;
 import sonia.scm.repository.api.RepositoryServiceFactory;
+import sonia.scm.security.Role;
 
 import com.google.inject.Inject;
 
@@ -34,17 +34,18 @@ public class WebConfigResource
     private final GitRepoConfig gitConfig;
     private final HgRepoConfig hgConfig;
     private final SvnRepoConfig svnConfig;
-    private final ScmConfiguration scmConfiguration;
 
     @Inject
     public WebConfigResource(final RepositoryServiceFactory repositoryServiceFactory, final GitRepoConfig gitConfig,
-            final HgRepoConfig hgConfig, final SvnRepoConfig svnConfig, final ScmConfiguration scmConfiguration)
+            final HgRepoConfig hgConfig, final SvnRepoConfig svnConfig)
     {
+        Subject subject = SecurityUtils.getSubject();
+        subject.checkRole(Role.ADMIN);
+
         this.repositoryServiceFactory = repositoryServiceFactory;
         this.gitConfig = gitConfig;
         this.hgConfig = hgConfig;
         this.svnConfig = svnConfig;
-        this.scmConfiguration = scmConfiguration;
     }
 
     @GET
@@ -55,10 +56,6 @@ public class WebConfigResource
         try
         {
             Repository repository = getRepository(repositoryId);
-            if (!hasOwnerPermission(repository))
-            {
-                return Response.status(Status.UNAUTHORIZED).build();
-            }
 
             GetConfigResponse response = new GetConfigResponse();
             String content = null;
@@ -112,10 +109,6 @@ public class WebConfigResource
         try
         {
             Repository repository = getRepository(repositoryId);
-            if (!hasOwnerPermission(repository))
-            {
-                return Response.status(Status.UNAUTHORIZED).build();
-            }
 
             String type = repository.getType();
             if ("git".equals(type))
@@ -145,19 +138,6 @@ public class WebConfigResource
         }
 
         return Response.status(status).build();
-    }
-
-    /**
-     * Checks if the current user has owner permission on the given repository.
-     *
-     * @param repository
-     *            the repository
-     * @return <code>true</code>, if the current user has owner permissions;
-     *         otherwise <code>false</code>
-     */
-    private boolean hasOwnerPermission(final Repository repository)
-    {
-        return PermissionUtil.hasPermission(scmConfiguration, repository, PermissionType.OWNER);
     }
 
     /**

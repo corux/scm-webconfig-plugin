@@ -117,7 +117,7 @@ corux.webconfig.ConfigPanel = Ext.extend(Ext.form.FormPanel, {
 Ext.reg('webConfigPanel', corux.webconfig.ConfigPanel);
 
 Sonia.repository.openListeners.push(function(repository, panels) {
-  if (Sonia.repository.isOwner(repository)) {
+  if (admin) {
     switch (repository.type) {
     case 'git':
     case 'hg':
