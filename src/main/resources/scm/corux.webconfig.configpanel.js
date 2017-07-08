@@ -24,13 +24,16 @@ corux.webconfig.ConfigPanel = Ext.extend(Ext.form.FormPanel, {
       title = 'conf/svnserve.conf';
       break;
     }
-    var loadInitialized = false;
     var config = {
       title : title,
       id : 'webconfigForm',
       url : restUrl + 'plugins/webconfig.json',
       baseParams : {
         'repository-id' : this.item.id
+      },
+      listeners: {
+        render: this.loadHandler,
+        scope: this
       },
       layout : {
         type : 'vbox',
@@ -52,15 +55,7 @@ corux.webconfig.ConfigPanel = Ext.extend(Ext.form.FormPanel, {
         formBind : false,
         scope : this,
         handler : this.loadHandler
-      } ],
-      show : function() {
-        if (!loadInitialized) {
-          loadInitialized = true;
-          this.loadHandler();
-        } else {
-          this.removeClass('x-hide-display');
-        }
-      }
+      } ]
     };
 
     Ext.apply(this, Ext.apply(this.initialConfig, config));
