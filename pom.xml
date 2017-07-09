@@ -12,7 +12,7 @@
   <groupId>sonia.scm.plugins</groupId>
   <artifactId>scm-webconfig-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>Allows to modify the .hg/hgrc, .git/config, and conf/svnserve.conf files through the web interface.</description>
 
@@ -97,6 +97,6 @@
   	<url>https://github.com/corux/scm-webconfig-plugin</url>
   	<connection>scm:git:https://github.com/corux/scm-webconfig-plugin</connection>
   	<developerConnection>scm:git:https://github.com/corux/scm-webconfig-plugin</developerConnection>
-    <tag>v1.1</tag>
+    <tag>HEAD</tag>
   </scm>
 </project>
