@@ -32,7 +32,7 @@ corux.webconfig.ConfigPanel = Ext.extend(Ext.form.FormPanel, {
         'repository-id' : this.item.id
       },
       listeners: {
-        render: this.loadHandler,
+        added: this.loadHandler,
         scope: this
       },
       layout : {
